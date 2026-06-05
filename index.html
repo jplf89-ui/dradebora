@@ -399,7 +399,105 @@
   }
   .offer-deadline strong { color: var(--dark); }
 
-  /* ── COUNTDOWN ── */
+  /* ── MINI CARD PREVIEW ── */
+  .mini-card {
+    max-width: 260px;
+    margin: 2rem auto 1.5rem;
+    background: var(--cream);
+    border: 1px solid var(--nude);
+    box-shadow: 0 12px 40px rgba(44,31,20,0.12);
+    animation: float 4s ease-in-out infinite;
+    position: relative;
+  }
+  .mini-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .mini-card-top {
+    background: var(--dark);
+    padding: 0.8rem 1rem 1.1rem;
+    text-align: center;
+    position: relative;
+  }
+  .mini-card-top::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 18px;
+    background: var(--cream);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+  .mini-card-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--nude);
+    letter-spacing: 0.06em;
+  }
+
+  .mini-card-body {
+    padding: 1.2rem 1rem 1rem;
+    text-align: center;
+  }
+  .mini-card-ornament { font-size: 1.2rem; margin-bottom: 0.5rem; }
+  .mini-card-de {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem;
+    color: var(--taupe);
+    margin-bottom: 0.1rem;
+  }
+  .mini-card-de em { font-style: italic; color: var(--dark); }
+  .mini-card-heart {
+    font-size: 0.8rem;
+    color: var(--rose);
+    margin: 0.2rem 0;
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+  .mini-card-para {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem;
+    color: var(--taupe);
+    margin-bottom: 0.6rem;
+  }
+  .mini-card-para em { font-style: italic; color: var(--gold); font-size: 0.9rem; }
+  .mini-card-divider {
+    width: 40px; height: 1px;
+    background: var(--nude);
+    margin: 0.5rem auto;
+  }
+  .mini-card-gift {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--dark);
+  }
+  .mini-card-sub {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--taupe);
+    margin-top: 0.2rem;
+  }
+
+  /* ── OFFER CTA BUTTON ── */
+  .offer-cta-btn {
+    width: 100%;
+    padding: 1.1rem;
+    background: var(--dark);
+    color: var(--cream);
+    border: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    margin-top: 0.5rem;
+  }
+  .offer-cta-btn:hover { background: var(--gold); transform: translateY(-2px); }
   .countdown-section {
     background: var(--dark);
     padding: 3rem 2rem;
@@ -725,124 +823,287 @@
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
 
-  /* ── MODAL ── */
+  /* ══════════════════════════════
+     MODAL — CARTÃO ROMÂNTICO
+  ══════════════════════════════ */
   .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(44, 31, 20, 0.85);
-    backdrop-filter: blur(8px);
+    background: rgba(20, 12, 6, 0.92);
+    backdrop-filter: blur(12px);
     z-index: 200;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 1.5rem;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.4s ease;
+    transition: all 0.5s ease;
   }
   .modal-overlay.open { opacity: 1; visibility: visible; }
 
-  .modal-inner {
-    background: var(--cream);
-    max-width: 480px;
+  /* O cartão em si */
+  .modal-card {
     width: 100%;
-    padding: 3rem 2.5rem;
+    max-width: 400px;
+    background: var(--cream);
     position: relative;
-    transform: scale(0.95) translateY(20px);
-    transition: transform 0.4s ease;
-    text-align: center;
-    overflow: hidden;
+    transform: scale(0.92) translateY(24px);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 60px 120px rgba(0,0,0,0.5);
   }
-  .modal-overlay.open .modal-inner { transform: scale(1) translateY(0); }
+  .modal-overlay.open .modal-card { transform: scale(1) translateY(0); }
 
-  .modal-petal-bg {
+  /* Borda dourada superior */
+  .modal-card::before {
+    content: '';
     position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.06;
-    font-size: 8rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--taupe), var(--gold), transparent);
   }
 
   .modal-close {
     position: absolute;
-    top: 1rem; right: 1.2rem;
+    top: 0.8rem; right: 1rem;
     background: none;
     border: none;
-    font-size: 1.2rem;
+    font-size: 1rem;
     cursor: pointer;
     color: var(--taupe);
-    line-height: 1;
+    opacity: 0.6;
+    z-index: 2;
+    transition: opacity 0.2s;
+  }
+  .modal-close:hover { opacity: 1; }
+
+  /* Topo escuro do cartão */
+  .card-top {
+    background: var(--dark);
+    padding: 2rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-top::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 28px;
+    background: var(--cream);
+    clip-path: ellipse(55% 100% at 50% 100%);
   }
 
-  .modal-badge {
+  /* Pétalas decorativas no topo */
+  .card-top-petals {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .card-top-petals span {
+    position: absolute;
+    font-size: 1.2rem;
+    opacity: 0.12;
+  }
+
+  .card-eyebrow {
     font-size: 0.55rem;
     letter-spacing: 0.5em;
     text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1.5rem;
-    padding: 0.4rem 1rem;
-    border: 1px solid var(--nude);
-    display: inline-block;
+    color: var(--taupe);
+    margin-bottom: 0.5rem;
+  }
+  .card-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--cream);
+    letter-spacing: 0.08em;
   }
 
-  .modal-title {
+  /* Corpo do cartão */
+  .card-body {
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+  }
+
+  /* Ornamento floral */
+  .card-ornament {
+    font-size: 1.6rem;
+    margin-bottom: 1.2rem;
+    opacity: 0.7;
+    animation: gentlePulse 3s ease-in-out infinite;
+  }
+  @keyframes gentlePulse {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.08); opacity: 1; }
+  }
+
+  /* De / Para */
+  .card-dedications {
+    margin-bottom: 1.8rem;
+  }
+
+  .card-ded-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0.4rem;
+  }
+
+  .card-ded-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--taupe);
+    margin-bottom: 0.15rem;
+  }
+
+  .card-ded-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--dark);
+    line-height: 1.1;
+  }
+
+  .card-ded-heart {
+    font-size: 1rem;
+    color: var(--rose);
+    margin: 0.4rem 0;
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    14% { transform: scale(1.2); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.15); }
+  }
+
+  .card-ded-name-to {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--gold);
+    line-height: 1.1;
+  }
+
+  /* Divisor ornamental */
+  .card-ornamental-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 1.5rem 0;
+  }
+  .card-ornamental-divider::before,
+  .card-ornamental-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--nude));
+  }
+  .card-ornamental-divider::after {
+    background: linear-gradient(90deg, var(--nude), transparent);
+  }
+  .card-ornamental-divider span {
+    font-size: 0.7rem;
+    color: var(--taupe);
+    opacity: 0.6;
+  }
+
+  /* Presente em destaque */
+  .card-gift-block {
+    background: var(--dark);
+    padding: 1.5rem 1.5rem 1.2rem;
+    margin: 0 -0.5rem 1.8rem;
+    position: relative;
+  }
+  .card-gift-block::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(184,148,106,0.2);
+    pointer-events: none;
+  }
+
+  .card-gift-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--taupe);
+    margin-bottom: 0.5rem;
+  }
+
+  .card-gift-name {
     font-family: 'Cormorant Garamond', serif;
     font-size: 2rem;
     font-weight: 300;
-    color: var(--dark);
+    color: var(--cream);
+    line-height: 1.1;
     margin-bottom: 0.3rem;
   }
 
-  .modal-procedure {
+  .card-gift-sub {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: 1.4rem;
-    color: var(--gold);
-    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--taupe);
   }
 
-  .modal-divider {
-    width: 60px;
-    height: 1px;
-    background: var(--nude);
-    margin: 0 auto 1.5rem;
-  }
-
-  .modal-quote {
+  /* Frase */
+  .card-quote {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: 1.05rem;
+    font-size: 1rem;
     color: var(--dark);
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
+    line-height: 1.75;
+    padding: 0 0.5rem;
+    opacity: 0.85;
   }
 
-  .modal-recipient {
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
+  /* Rodapé do cartão */
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem 1.5rem;
+    border-top: 1px solid var(--nude);
+    margin-top: 1.5rem;
+  }
+
+  .card-footer-info {
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--taupe);
-    margin-bottom: 0.3rem;
-  }
-  .modal-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.6rem;
-    font-weight: 400;
-    color: var(--dark);
-    margin-bottom: 2rem;
+    line-height: 1.8;
   }
 
+  .card-footer-stamp {
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--nude);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+  }
+
+  /* Botões abaixo do cartão */
   .modal-actions {
+    padding: 1rem 2rem 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 0.7rem;
+    background: var(--cream);
+    border-top: 1px solid var(--nude);
   }
 
   .modal-btn-primary {
-    padding: 0.9rem;
+    padding: 1rem;
     background: var(--dark);
     color: var(--cream);
     border: none;
@@ -852,22 +1113,26 @@
     text-transform: uppercase;
     cursor: pointer;
     text-decoration: none;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
     transition: background 0.3s;
   }
   .modal-btn-primary:hover { background: var(--gold); }
 
   .modal-btn-secondary {
-    padding: 0.8rem;
+    padding: 0.7rem;
     background: transparent;
     color: var(--taupe);
     border: 1px solid var(--nude);
     font-family: 'Jost', sans-serif;
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: border-color 0.3s, color 0.3s;
+    transition: border-color 0.2s, color 0.2s;
+    text-align: center;
   }
   .modal-btn-secondary:hover { border-color: var(--taupe); color: var(--dark); }
 
@@ -981,38 +1246,29 @@
         </p>
       </div>
 
-      <p style="font-size:0.7rem; color:var(--taupe); letter-spacing:0.1em; margin-top:1.5rem;">
-        Após a compra você recebe o cartão virtual personalizado para presentear.
-      </p>
-    </div>
-  </section>
-
-  <!-- VOUCHER PREVIEW -->
-  <section class="preview-section">
-    <p class="preview-label reveal">Veja como fica o cartão virtual</p>
-
-    <div class="voucher floating reveal">
-      <div class="voucher-header">
-        <div class="voucher-brand">Dra.</div>
-        <div class="voucher-dr">Débora Araújo</div>
-      </div>
-      <div class="voucher-body">
-        <p class="voucher-presents">Com amor, apresenta</p>
-        <h3 class="voucher-procedure" id="preview-procedure">Vale Botox</h3>
-        <p class="voucher-for">Para <strong id="preview-name">Você</strong>,<br>com todo o carinho do mundo</p>
-        <p class="voucher-quote">"Flores murcham, mas a sua beleza merece durar para sempre."</p>
-        <div class="voucher-footer">
-          <div>
-            <div>Válido por</div>
-            <div style="color: var(--dark); font-size: 0.8rem;">90 dias</div>
-          </div>
-          <div class="voucher-stamp">🌸</div>
-          <div>
-            <div>Curitiba · PR</div>
-            <div style="color: var(--dark); font-size: 0.8rem;">@dradeborahg</div>
-          </div>
+      <!-- Mini cartão preview -->
+      <div class="mini-card reveal">
+        <div class="mini-card-top">
+          <span class="mini-card-brand">Dra. Débora Araújo</span>
+        </div>
+        <div class="mini-card-body">
+          <div class="mini-card-ornament">🌸</div>
+          <div class="mini-card-de">com amor, de <em>você</em></div>
+          <div class="mini-card-heart">♥</div>
+          <div class="mini-card-para">para <em>ela</em></div>
+          <div class="mini-card-divider"></div>
+          <div class="mini-card-gift">Vale Botox</div>
+          <div class="mini-card-sub">Dra. Débora · Curitiba</div>
         </div>
       </div>
+
+      <button class="offer-cta-btn reveal" onclick="document.getElementById('personalizar').scrollIntoView({behavior:'smooth'})">
+        ✦ Criar cartão virtual personalizado
+      </button>
+
+      <p style="font-size:0.65rem; color:var(--taupe); letter-spacing:0.08em; margin-top:1rem; line-height:1.6;">
+        Personalize com o nome dela e uma frase especial.<br>O cartão final é enviado após a confirmação do pagamento.
+      </p>
     </div>
   </section>
 
@@ -1039,12 +1295,18 @@
 
       <div class="form-group reveal">
         <label class="form-label">Frase romântica</label>
-        <select class="form-select" id="quote-select" onchange="updatePreview()">
+        <select class="form-select" id="quote-select" onchange="handleQuoteSelect()">
           <option value="Flores murcham, mas a sua beleza merece durar para sempre.">Flores murcham, mas a sua beleza merece durar para sempre.</option>
           <option value="Porque você é bonita o ano todo — não só quando você lembra.">Porque você é bonita o ano todo — não só quando você lembra.</option>
           <option value="De quem te ama e sabe exatamente o que você quer.">De quem te ama e sabe exatamente o que você quer.</option>
           <option value="Para ela, com amor e muito bom gosto.">Para ela, com amor e muito bom gosto.</option>
+          <option value="__custom__">✍️ Escrever minha própria frase...</option>
         </select>
+      </div>
+
+      <div class="form-group reveal" id="custom-quote-group" style="display:none;">
+        <label class="form-label">Sua frase personalizada</label>
+        <textarea class="form-input" id="custom-quote" rows="3" placeholder="Escreva aqui o que vem do coração..." oninput="updatePreview()" style="resize:none; line-height:1.6;"></textarea>
       </div>
 
       <button class="generate-btn reveal" onclick="openModal()">✦ Gerar cartão virtual</button>
@@ -1069,20 +1331,75 @@
 
 <!-- MODAL CARTÃO VIRTUAL -->
 <div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
-  <div class="modal-inner" id="modal-inner">
-    <div class="modal-petal-bg">🌸</div>
+  <div class="modal-card">
     <button class="modal-close" onclick="closeModal()">✕</button>
 
-    <div class="modal-badge">Vale-Presente Digital</div>
-    <div class="modal-title">Dra. Débora Araújo</div>
-    <div class="modal-procedure" id="modal-procedure">Vale Botox ✨</div>
-    <div class="modal-divider"></div>
-    <p class="modal-quote" id="modal-quote">"Flores murcham, mas a sua beleza merece durar para sempre."</p>
-    <p class="modal-recipient">Este presente é para</p>
-    <p class="modal-name" id="modal-name">Você</p>
+    <!-- Topo escuro com nome da clínica -->
+    <div class="card-top">
+      <div class="card-top-petals">
+        <span style="top:10%;left:8%">🌸</span>
+        <span style="top:60%;left:5%">✿</span>
+        <span style="top:20%;right:10%">🌸</span>
+        <span style="top:70%;right:8%">✿</span>
+      </div>
+      <p class="card-eyebrow">Vale-Presente Digital</p>
+      <div class="card-brand">Dra. Débora Araújo</div>
+    </div>
+
+    <!-- Corpo do cartão -->
+    <div class="card-body">
+
+      <!-- Ornamento -->
+      <div class="card-ornament">🌸</div>
+
+      <!-- De / Para -->
+      <div class="card-dedications">
+        <div class="card-ded-row">
+          <span class="card-ded-label">com amor, de</span>
+          <span class="card-ded-name" id="modal-from">—</span>
+        </div>
+        <div class="card-ded-heart">♥</div>
+        <div class="card-ded-row">
+          <span class="card-ded-label">para</span>
+          <span class="card-ded-name-to" id="modal-name">—</span>
+        </div>
+      </div>
+
+      <!-- Divisor -->
+      <div class="card-ornamental-divider"><span>✦</span></div>
+
+      <!-- Presente em destaque -->
+      <div class="card-gift-block">
+        <p class="card-gift-label">este presente é</p>
+        <div class="card-gift-name" id="modal-procedure">Um Vale Botox</div>
+        <p class="card-gift-sub">com a Dra. Débora Araújo · Curitiba</p>
+      </div>
+
+      <!-- Frase romântica -->
+      <p class="card-quote" id="modal-quote">"Flores murcham, mas a sua beleza merece durar para sempre."</p>
+
+      <!-- Rodapé do cartão -->
+      <div class="card-footer">
+        <div class="card-footer-info">
+          <div>Válido por 90 dias</div>
+          <div>@dradeborahg</div>
+        </div>
+        <div class="card-footer-stamp">🌸</div>
+        <div class="card-footer-info" style="text-align:right">
+          <div>Curitiba · PR</div>
+          <div>Dia dos Namorados</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Ações -->
     <div class="modal-actions">
-      <a href="https://wa.me/554197623698?text=Olá%20Dra.%20Débora!%20Tenho%20um%20vale-presente%20e%20quero%20agendar%20meu%20procedimento!" class="modal-btn-primary" target="_blank">Agendar pelo WhatsApp</a>
-      <button class="modal-btn-secondary" onclick="closeModal()">Voltar e editar</button>
+      <a href="#" class="modal-btn-primary" id="modal-wpp-btn" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Garantir este presente agora
+      </a>
+      <button class="modal-btn-secondary" onclick="closeModal()">← Voltar e editar</button>
     </div>
   </div>
 </div>
@@ -1184,6 +1501,22 @@
   updateCountdown();
   setInterval(updateCountdown, 1000);
 
+  // ── QUOTE SELECT ──
+  function handleQuoteSelect() {
+    const val = document.getElementById('quote-select').value;
+    const customGroup = document.getElementById('custom-quote-group');
+    customGroup.style.display = val === '__custom__' ? 'block' : 'none';
+    updatePreview();
+  }
+
+  function getQuote() {
+    const val = document.getElementById('quote-select').value;
+    if (val === '__custom__') {
+      return document.getElementById('custom-quote').value.trim() || 'Uma mensagem especial para você.';
+    }
+    return val;
+  }
+
   // ── PREVIEW UPDATE ──
   function updatePreview() {
     const name = document.getElementById('to-name').value || 'Você';
@@ -1193,16 +1526,17 @@
 
   // ── MODAL ──
   function openModal() {
-    const name = document.getElementById('to-name').value || 'Você';
-    const from = document.getElementById('from-name').value || 'Alguém especial';
-    const quote = document.getElementById('quote-select').value;
+    const name = document.getElementById('to-name').value.trim() || 'Você';
+    const from = document.getElementById('from-name').value.trim() || 'Alguém especial';
+    const quote = getQuote();
 
     document.getElementById('modal-name').textContent = name;
-    document.getElementById('modal-procedure').textContent = 'Vale Botox ✨';
+    document.getElementById('modal-from').textContent = from;
+    document.getElementById('modal-procedure').textContent = 'Um Vale Botox ✨';
     document.getElementById('modal-quote').textContent = `"${quote}"`;
 
-    const waText = encodeURIComponent(`Olá Dra. Débora! Quero presentear ${name} com o Vale Botox por R$ 990 🌸 Como faço para garantir?`);
-    document.querySelector('.modal-btn-primary').href = `https://wa.me/554197623698?text=${waText}`;
+    const waText = encodeURIComponent(`Olá Dra. Débora! Quero garantir o Vale Botox de Dia dos Namorados por R$ 990 para presentear ${name}. Como faço? 🌸`);
+    document.getElementById('modal-wpp-btn').href = `https://wa.me/554197623698?text=${waText}`;
 
     document.getElementById('modal').classList.add('open');
   }
