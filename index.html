@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presente de Dia dos Namorados | Dra. Débora Araújo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #FAF6F0;
+    --nude: #E8D5C4;
+    --taupe: #C9A98A;
+    --gold: #B8946A;
+    --dark: #2C1F14;
+    --rose: #D4A0A0;
+    --blush: #F0DDD8;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--cream);
+    font-family: 'Jost', sans-serif;
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* ── INTRO SCREEN ── */
+  #intro {
+    position: fixed;
+    inset: 0;
+    background: var(--dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: opacity 1s ease, visibility 1s ease;
+  }
+  #intro.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+  .intro-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1.1rem, 4vw, 1.5rem);
+    color: var(--nude);
+    letter-spacing: 0.08em;
+    text-align: center;
+    padding: 0 2rem;
+    opacity: 0;
+    animation: fadeSlideUp 1s ease 0.5s forwards;
+  }
+  .intro-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    font-weight: 300;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 0.3em;
+    opacity: 0;
+    animation: fadeSlideUp 1s ease 1s forwards;
+  }
+  .intro-sub {
+    font-family: 'Jost', sans-serif;
+    font-weight: 200;
+    font-size: 0.75rem;
+    color: var(--taupe);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-top: 0.6em;
+    opacity: 0;
+    animation: fadeSlideUp 1s ease 1.4s forwards;
+  }
+  .intro-btn {
+    margin-top: 3rem;
+    padding: 0.9rem 2.5rem;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0;
+    animation: fadeSlideUp 1s ease 1.9s forwards;
+    transition: background 0.3s, color 0.3s;
+  }
+  .intro-btn:hover { background: var(--gold); color: var(--dark); }
+
+  /* petals intro */
+  .petal-intro {
+    position: absolute;
+    width: 8px;
+    height: 14px;
+    border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
+    opacity: 0;
+    animation: petalFall linear infinite;
+  }
+
+  /* ── MAIN PAGE ── */
+  #main {
+    min-height: 100vh;
+    opacity: 0;
+    transition: opacity 1s ease 0.3s;
+  }
+  #main.visible { opacity: 1; }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: linear-gradient(160deg, #FAF6F0 0%, #F0E6DB 50%, #E8D5C4 100%);
+  }
+
+  /* Petals canvas */
+  #petals-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Decorative circle */
+  .hero-circle {
+    position: absolute;
+    width: min(70vw, 500px);
+    height: min(70vw, 500px);
+    border-radius: 50%;
+    border: 1px solid rgba(184, 148, 106, 0.2);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotateSlow 30s linear infinite;
+  }
+  .hero-circle::before {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border-radius: 50%;
+    border: 1px dashed rgba(184, 148, 106, 0.15);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 400;
+    opacity: 0;
+    animation: fadeSlideUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 10vw, 6rem);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--dark);
+    margin: 0.2em 0;
+    opacity: 0;
+    animation: fadeSlideUp 0.8s ease 0.5s forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(1rem, 3vw, 1.4rem);
+    color: var(--taupe);
+    font-weight: 300;
+    max-width: 480px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeSlideUp 0.8s ease 0.8s forwards;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    padding: 1rem 2.8rem;
+    background: var(--dark);
+    color: var(--cream);
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 300;
+    cursor: pointer;
+    border: none;
+    transition: background 0.3s, transform 0.2s;
+    opacity: 0;
+    animation: fadeSlideUp 0.8s ease 1.1s forwards;
+  }
+  .hero-cta:hover { background: var(--gold); transform: translateY(-2px); }
+
+  /* ── FLOWER BLOOM SECTION ── */
+  .bloom-section {
+    background: var(--dark);
+    padding: 6rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bloom-section::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 0; right: 0;
+    height: 80px;
+    background: var(--cream);
+    clip-path: ellipse(55% 100% at 50% 0%);
+  }
+
+  .bloom-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--taupe);
+    margin-bottom: 2rem;
+  }
+
+  /* SVG Flower */
+  .flower-container {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 3rem;
+    position: relative;
+  }
+
+  .petal-svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    animation: flowerBloom 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    transform-origin: center;
+    transform: scale(0) rotate(-30deg);
+    opacity: 0;
+  }
+
+  .bloom-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.6rem, 5vw, 2.6rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cream);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.4;
+  }
+  .bloom-quote span { color: var(--gold); }
+
+  /* ── GIFT CARDS ── */
+  .cards-section {
+    padding: 6rem 2rem;
+    background: var(--cream);
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 300;
+    text-align: center;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+
+  .section-sub {
+    text-align: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--taupe);
+    margin-bottom: 4rem;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .gift-card {
+    background: white;
+    border: 1px solid var(--nude);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .gift-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--nude), var(--gold), var(--nude));
+    transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+  .gift-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(44,31,20,0.1); border-color: var(--taupe); }
+  .gift-card:hover::before { transform: scaleX(1); }
+  .gift-card.selected { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+
+  .card-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--dark);
+    margin-bottom: 0.3rem;
+  }
+
+  .card-tagline {
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    color: var(--taupe);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+
+  .card-price {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 0.5rem 1.2rem;
+    border: 1px solid var(--nude);
+    display: inline-block;
+  }
+
+  /* ── VIRTUAL CARD PREVIEW ── */
+  .preview-section {
+    background: linear-gradient(160deg, #2C1F14 0%, #3D2B1A 100%);
+    padding: 6rem 2rem;
+    text-align: center;
+  }
+
+  .preview-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--taupe);
+    margin-bottom: 3rem;
+  }
+
+  /* The actual gift certificate card */
+  .voucher {
+    max-width: 420px;
+    margin: 0 auto 3rem;
+    background: var(--cream);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.4);
+  }
+
+  .voucher-header {
+    background: var(--dark);
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+  }
+  .voucher-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 30px;
+    background: var(--cream);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+
+  .voucher-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--taupe);
+    letter-spacing: 0.2em;
+  }
+  .voucher-dr {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--cream);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 0.1em;
+  }
+
+  .voucher-body {
+    padding: 3rem 2rem 2rem;
+  }
+
+  .voucher-presents {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--taupe);
+    margin-bottom: 0.5rem;
+  }
+
+  .voucher-procedure {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: var(--dark);
+    margin-bottom: 0.2rem;
+  }
+
+  .voucher-for {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--taupe);
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--nude);
+  }
+  .voucher-for strong { color: var(--gold); font-style: normal; }
+
+  .voucher-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--dark);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .voucher-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--taupe);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--nude);
+  }
+
+  .voucher-stamp {
+    width: 60px;
+    height: 60px;
+    border: 1px solid var(--nude);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+
+  /* ── PERSONALIZAR SECTION ── */
+  .form-section {
+    background: var(--cream);
+    padding: 6rem 2rem;
+  }
+
+  .form-container {
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  .form-group {
+    margin-bottom: 1.8rem;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--taupe);
+    margin-bottom: 0.6rem;
+  }
+
+  .form-input, .form-select {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    background: white;
+    border: 1px solid var(--nude);
+    color: var(--dark);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.3s;
+    -webkit-appearance: none;
+  }
+  .form-input:focus, .form-select:focus { border-color: var(--gold); }
+  .form-input::placeholder { color: var(--taupe); opacity: 0.6; }
+
+  .generate-btn {
+    width: 100%;
+    padding: 1.1rem;
+    background: var(--dark);
+    color: var(--cream);
+    border: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 1rem;
+  }
+  .generate-btn:hover { background: var(--gold); }
+
+  /* ── WHATSAPP SECTION ── */
+  .wpp-section {
+    background: var(--dark);
+    padding: 5rem 2rem;
+    text-align: center;
+  }
+
+  .wpp-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cream);
+    margin-bottom: 0.5rem;
+  }
+  .wpp-sub {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--taupe);
+    margin-bottom: 2.5rem;
+  }
+
+  .wpp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 2.5rem;
+    background: #25D366;
+    color: white;
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 400;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .wpp-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark);
+    padding: 2rem;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  footer p {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--taupe);
+    opacity: 0.5;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes rotateSlow {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  @keyframes petalFall {
+    0% { transform: translateY(-10px) rotate(0deg); opacity: 0.6; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  @keyframes flowerBloom {
+    0% { transform: scale(0) rotate(-30deg); opacity: 0; }
+    60% { transform: scale(1.1) rotate(5deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .floating { animation: float 4s ease-in-out infinite; }
+
+  /* Scroll reveal */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(44, 31, 20, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+  }
+  .modal-overlay.open { opacity: 1; visibility: visible; }
+
+  .modal-inner {
+    background: var(--cream);
+    max-width: 480px;
+    width: 100%;
+    padding: 3rem 2.5rem;
+    position: relative;
+    transform: scale(0.95) translateY(20px);
+    transition: transform 0.4s ease;
+    text-align: center;
+    overflow: hidden;
+  }
+  .modal-overlay.open .modal-inner { transform: scale(1) translateY(0); }
+
+  .modal-petal-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.06;
+    font-size: 8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem; right: 1.2rem;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--taupe);
+    line-height: 1;
+  }
+
+  .modal-badge {
+    font-size: 0.55rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--nude);
+    display: inline-block;
+  }
+
+  .modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--dark);
+    margin-bottom: 0.3rem;
+  }
+
+  .modal-procedure {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--nude);
+    margin: 0 auto 1.5rem;
+  }
+
+  .modal-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--dark);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-recipient {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--taupe);
+    margin-bottom: 0.3rem;
+  }
+  .modal-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--dark);
+    margin-bottom: 2rem;
+  }
+
+  .modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .modal-btn-primary {
+    padding: 0.9rem;
+    background: var(--dark);
+    color: var(--cream);
+    border: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    transition: background 0.3s;
+  }
+  .modal-btn-primary:hover { background: var(--gold); }
+
+  .modal-btn-secondary {
+    padding: 0.8rem;
+    background: transparent;
+    color: var(--taupe);
+    border: 1px solid var(--nude);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .modal-btn-secondary:hover { border-color: var(--taupe); color: var(--dark); }
+
+  /* Petal particles */
+  .particle {
+    position: absolute;
+    border-radius: 50% 0 50% 0;
+    pointer-events: none;
+    animation: petalDrift ease-in-out infinite;
+  }
+  @keyframes petalDrift {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- INTRO SCREEN -->
+<div id="intro">
+  <div class="intro-text">Um presente pensado com cuidado</div>
+  <div class="intro-name">Débora Araújo</div>
+  <div class="intro-sub">Harmonização &amp; Estética · Curitiba</div>
+  <button class="intro-btn" onclick="enterSite()">Abrir presente ✦</button>
+</div>
+
+<!-- MAIN PAGE -->
+<div id="main">
+
+  <!-- HERO -->
+  <section class="hero">
+    <canvas id="petals-canvas"></canvas>
+    <div class="hero-circle"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Dia dos Namorados · Presente Especial</p>
+      <h1 class="hero-title">Ela não quer<br><em>flores.</em></h1>
+      <p class="hero-subtitle">Ela quer se olhar no espelho e sentir que é ela mesma — na melhor versão possível.</p>
+      <button class="hero-cta" onclick="scrollToCards()">Ver presentes disponíveis</button>
+    </div>
+  </section>
+
+  <!-- BLOOM SECTION -->
+  <section class="bloom-section">
+    <p class="bloom-label reveal">A mensagem da Dra. Débora</p>
+    <div class="flower-container floating reveal" id="flower">
+      <svg class="petal-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Petals -->
+        <g transform="translate(100,100)">
+          <ellipse cx="0" cy="-38" rx="16" ry="32" fill="#E8D5C4" opacity="0.9" transform="rotate(0)"/>
+          <ellipse cx="0" cy="-38" rx="16" ry="32" fill="#D4A0A0" opacity="0.8" transform="rotate(45)"/>
+          <ellipse cx="0" cy="-38" rx="16" ry="32" fill="#E8D5C4" opacity="0.9" transform="rotate(90)"/>
+          <ellipse cx="0" cy="-38" rx="16" ry="32" fill="#D4A0A0" opacity="0.8" transform="rotate(135)"/>
+          <ellipse cx="0" cy="-38" rx="16" ry="32" fill="#E8D5C4" opacity="0.9" transform="rotate(180)"/>
+          <ellipse cx="0" cy="-38" rx="16" ry="32" fill="#D4A0A0" opacity="0.8" transform="rotate(225)"/>
+          <ellipse cx="0" cy="-38" rx="16" ry="32" fill="#E8D5C4" opacity="0.9" transform="rotate(270)"/>
+          <ellipse cx="0" cy="-38" rx="16" ry="32" fill="#D4A0A0" opacity="0.8" transform="rotate(315)"/>
+          <!-- Center -->
+          <circle cx="0" cy="0" r="18" fill="#B8946A"/>
+          <circle cx="0" cy="0" r="10" fill="#FAF6F0"/>
+        </g>
+      </svg>
+    </div>
+    <p class="bloom-quote reveal">"Flores murcham em uma semana.<br>O que eu ofereço dura <span>muito mais.</span>"</p>
+  </section>
+
+  <!-- GIFT CARDS -->
+  <section class="cards-section" id="cards">
+    <h2 class="section-title reveal">Escolha o <em>presente</em></h2>
+    <p class="section-sub reveal">vale-presente digital · entrega imediata</p>
+
+    <div class="cards-grid">
+      <div class="gift-card reveal" onclick="selectCard('Botox', '✨', 'O lift que ela já pediu mil vezes')">
+        <div class="card-icon">✨</div>
+        <h3 class="card-title">Vale Botox</h3>
+        <p class="card-tagline">"O lift que ela já<br>pediu mil vezes."</p>
+        <span class="card-price">Selecionar</span>
+      </div>
+      <div class="gift-card reveal" onclick="selectCard('Depilação a Laser', '🌸', 'Pele lisa o ano todo — isso sim é luxo')">
+        <div class="card-icon">🌸</div>
+        <h3 class="card-title">Vale Depilação</h3>
+        <p class="card-tagline">"Pele lisa o ano todo —<br>isso sim é luxo."</p>
+        <span class="card-price">Selecionar</span>
+      </div>
+      <div class="gift-card reveal" onclick="selectCard('Harmonização Facial', '💎', 'Para ela brilhar tanto por fora quanto por dentro')">
+        <div class="card-icon">💎</div>
+        <h3 class="card-title">Vale Harmonização</h3>
+        <p class="card-tagline">"Para ela brilhar tanto<br>por fora quanto por dentro."</p>
+        <span class="card-price">Selecionar</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- VOUCHER PREVIEW -->
+  <section class="preview-section">
+    <p class="preview-label reveal">Veja como fica o cartão virtual</p>
+
+    <div class="voucher floating reveal">
+      <div class="voucher-header">
+        <div class="voucher-brand">Dra.</div>
+        <div class="voucher-dr">Débora Araújo</div>
+      </div>
+      <div class="voucher-body">
+        <p class="voucher-presents">Com amor, apresenta</p>
+        <h3 class="voucher-procedure" id="preview-procedure">Vale Botox</h3>
+        <p class="voucher-for">Para <strong id="preview-name">Você</strong>,<br>com todo o carinho do mundo</p>
+        <p class="voucher-quote">"Flores murcham, mas a sua beleza merece durar para sempre."</p>
+        <div class="voucher-footer">
+          <div>
+            <div>Válido por</div>
+            <div style="color: var(--dark); font-size: 0.8rem;">90 dias</div>
+          </div>
+          <div class="voucher-stamp">🌸</div>
+          <div>
+            <div>Curitiba · PR</div>
+            <div style="color: var(--dark); font-size: 0.8rem;">@dradeborahg</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERSONALIZE FORM -->
+  <section class="form-section" id="personalizar">
+    <div class="form-container">
+      <h2 class="section-title reveal" style="text-align:left; margin-bottom:0.3rem;">Personalize o<br><em>cartão</em></h2>
+      <p class="section-sub reveal" style="text-align:left; margin-bottom:3rem;">para ela saber que foi você</p>
+
+      <div class="form-group reveal">
+        <label class="form-label">Nome de quem dá o presente</label>
+        <input type="text" class="form-input" id="from-name" placeholder="Seu nome" oninput="updatePreview()">
+      </div>
+
+      <div class="form-group reveal">
+        <label class="form-label">Nome dela</label>
+        <input type="text" class="form-input" id="to-name" placeholder="Nome da sua namorada" oninput="updatePreview()">
+      </div>
+
+      <div class="form-group reveal">
+        <label class="form-label">Procedimento</label>
+        <select class="form-select" id="procedure-select" onchange="updatePreview()">
+          <option value="Vale Botox">Vale Botox ✨</option>
+          <option value="Vale Depilação a Laser">Vale Depilação a Laser 🌸</option>
+          <option value="Vale Harmonização Facial">Vale Harmonização Facial 💎</option>
+        </select>
+      </div>
+
+      <div class="form-group reveal">
+        <label class="form-label">Frase romântica</label>
+        <select class="form-select" id="quote-select" onchange="updatePreview()">
+          <option value="Flores murcham, mas a sua beleza merece durar para sempre.">Flores murcham, mas a sua beleza merece durar para sempre.</option>
+          <option value="Porque você é bonita o ano todo — não só quando você lembra.">Porque você é bonita o ano todo — não só quando você lembra.</option>
+          <option value="De quem te ama e sabe exatamente o que você quer.">De quem te ama e sabe exatamente o que você quer.</option>
+          <option value="Para ela, com amor e muito bom gosto.">Para ela, com amor e muito bom gosto.</option>
+        </select>
+      </div>
+
+      <button class="generate-btn reveal" onclick="openModal()">✦ Gerar cartão virtual</button>
+    </div>
+  </section>
+
+  <!-- WPP SECTION -->
+  <section class="wpp-section">
+    <h2 class="wpp-title">Pronto para surpreendê-la?</h2>
+    <p class="wpp-sub">Fale com a Dra. Débora e finalize seu presente</p>
+    <a href="https://wa.me/554197623698?text=Olá%20Dra.%20Débora!%20Quero%20presentear%20minha%20namorada%20no%20Dia%20dos%20Namorados%20com%20um%20vale-presente.%20Pode%20me%20ajudar?" class="wpp-btn" target="_blank">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Falar no WhatsApp
+    </a>
+  </section>
+
+  <footer>
+    <p>© 2025 Dra. Débora Araújo · Harmonização &amp; Estética · Curitiba · @dradeborahg</p>
+  </footer>
+
+</div>
+
+<!-- MODAL CARTÃO VIRTUAL -->
+<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal-inner" id="modal-inner">
+    <div class="modal-petal-bg">🌸</div>
+    <button class="modal-close" onclick="closeModal()">✕</button>
+
+    <div class="modal-badge">Vale-Presente Digital</div>
+    <div class="modal-title">Dra. Débora Araújo</div>
+    <div class="modal-procedure" id="modal-procedure">Vale Botox ✨</div>
+    <div class="modal-divider"></div>
+    <p class="modal-quote" id="modal-quote">"Flores murcham, mas a sua beleza merece durar para sempre."</p>
+    <p class="modal-recipient">Este presente é para</p>
+    <p class="modal-name" id="modal-name">Você</p>
+    <div class="modal-actions">
+      <a href="https://wa.me/554197623698?text=Olá%20Dra.%20Débora!%20Tenho%20um%20vale-presente%20e%20quero%20agendar%20meu%20procedimento!" class="modal-btn-primary" target="_blank">Agendar pelo WhatsApp</a>
+      <button class="modal-btn-secondary" onclick="closeModal()">Voltar e editar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── PETAL CANVAS ──
+  const canvas = document.getElementById('petals-canvas');
+  const ctx = canvas.getContext('2d');
+  let petals = [];
+
+  function resizeCanvas() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+
+  function createPetal() {
+    return {
+      x: Math.random() * canvas.width,
+      y: -20,
+      size: Math.random() * 12 + 6,
+      speedY: Math.random() * 1.5 + 0.5,
+      speedX: Math.sin(Math.random() * Math.PI * 2) * 0.8,
+      rotation: Math.random() * 360,
+      rotSpeed: Math.random() * 2 - 1,
+      opacity: Math.random() * 0.4 + 0.15,
+      color: ['#E8D5C4','#D4A0A0','#C9A98A','#F0DDD8'][Math.floor(Math.random()*4)]
+    };
+  }
+
+  function drawPetal(p) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rotation * Math.PI / 180);
+    ctx.globalAlpha = p.opacity;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, p.size/2, p.size, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function animatePetals() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (petals.length < 25) petals.push(createPetal());
+    petals = petals.filter(p => p.y < canvas.height + 30);
+    petals.forEach(p => {
+      p.y += p.speedY;
+      p.x += p.speedX;
+      p.rotation += p.rotSpeed;
+      drawPetal(p);
+    });
+    requestAnimationFrame(animatePetals);
+  }
+
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+  animatePetals();
+
+  // ── INTRO ──
+  function enterSite() {
+    document.getElementById('intro').classList.add('hidden');
+    const main = document.getElementById('main');
+    main.classList.add('visible');
+    // trigger flower after reveal
+    setTimeout(() => {
+      document.getElementById('flower').querySelector('.petal-svg').style.animation = 'flowerBloom 2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+    }, 1200);
+  }
+
+  // ── SCROLL REVEAL ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ── NAVIGATION ──
+  function scrollToCards() {
+    document.getElementById('cards').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ── CARD SELECT ──
+  function selectCard(procedure, icon, tagline) {
+    document.querySelectorAll('.gift-card').forEach(c => c.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+    document.getElementById('procedure-select').value = procedure.includes('Depilação') ? 'Vale Depilação a Laser' : procedure.includes('Harmonização') ? 'Vale Harmonização Facial' : 'Vale Botox';
+    updatePreview();
+    document.getElementById('personalizar').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ── PREVIEW UPDATE ──
+  function updatePreview() {
+    const name = document.getElementById('to-name').value || 'Você';
+    const procedure = document.getElementById('procedure-select').value;
+    document.getElementById('preview-name').textContent = name;
+    document.getElementById('preview-procedure').textContent = procedure;
+  }
+
+  // ── MODAL ──
+  function openModal() {
+    const name = document.getElementById('to-name').value || 'Você';
+    const from = document.getElementById('from-name').value || 'Alguém especial';
+    const procedure = document.getElementById('procedure-select').value;
+    const quote = document.getElementById('quote-select').value;
+
+    document.getElementById('modal-name').textContent = name;
+    document.getElementById('modal-procedure').textContent = procedure;
+    document.getElementById('modal-quote').textContent = `"${quote}"`;
+
+    // Update WA link
+    const waText = encodeURIComponent(`Olá Dra. Débora! ${from} me presenteou com um ${procedure} 🌸 Quero agendar!`);
+    document.querySelector('.modal-btn-primary').href = `https://wa.me/554197623698?text=${waText}`;
+
+    document.getElementById('modal').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+  }
+
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('modal')) closeModal();
+  }
+
+  // ── FLOWER BLOOM ON SCROLL ──
+  const flowerObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const svg = e.target.querySelector('.petal-svg');
+        if (svg) {
+          svg.style.animation = 'none';
+          svg.offsetHeight; // reflow
+          svg.style.animation = 'flowerBloom 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+        }
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.flower-container').forEach(el => flowerObs.observe(el));
+</script>
+</body>
+</html>
