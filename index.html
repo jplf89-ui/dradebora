@@ -1486,7 +1486,7 @@
     const now = new Date();
     const diff = deadline - now;
     if (diff <= 0) {
-      document.querySelector('.countdown-section').innerHTML = '<p style="font-family:Cormorant Garamond,serif;font-style:italic;font-size:1.4rem;color:var(--taupe);text-align:center;">Esta condição especial foi encerrada.</p>';
+      document.querySelector('.countdown-section').innerHTML = '<p style="font-family:Cormorant Garamond,serif;font-style:italic;font-size:1.4rem;color:var(--taupe);text-align:center;"></p>';
       return;
     }
     const days = Math.floor(diff / 86400000);
