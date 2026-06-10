@@ -1154,7 +1154,7 @@
 <!-- INTRO SCREEN -->
 <div id="intro">
   <div class="intro-text">Um presente pensado com cuidado</div>
-  <div class="intro-name">Dra. Débora Araújo</div>
+  <div class="intro-name">Débora Araújo</div>
   <div class="intro-sub">Harmonização &amp; Estética · Curitiba</div>
   <button class="intro-btn" onclick="enterSite()">Abrir presente ✦</button>
 </div>
@@ -1556,13 +1556,166 @@
         const svg = e.target.querySelector('.petal-svg');
         if (svg) {
           svg.style.animation = 'none';
-          svg.offsetHeight; // reflow
+          svg.offsetHeight;
           svg.style.animation = 'flowerBloom 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
         }
       }
     });
   }, { threshold: 0.5 });
   document.querySelectorAll('.flower-container').forEach(el => flowerObs.observe(el));
+
+  // ── URL PARAMS → CARTÃO FINAL ──
+  (function() {
+    const params = new URLSearchParams(window.location.search);
+    const de    = params.get('de');
+    const para  = params.get('para');
+    const frase = params.get('frase');
+
+    if (!de && !para) return; // modo LP normal
+
+    // Esconde tudo e mostra tela do cartão final
+    document.getElementById('intro').style.display = 'none';
+    document.getElementById('main').style.display  = 'none';
+
+    const tela = document.getElementById('gift-screen');
+    tela.style.display = 'flex';
+
+    document.getElementById('gs-from').textContent  = de    || 'Alguém especial';
+    document.getElementById('gs-to').textContent    = para  || 'Você';
+    document.getElementById('gs-quote').textContent = frase ? `"${frase}"` : '"Flores murcham, mas a sua beleza merece durar para sempre."';
+
+    // Anima pétalas de fundo
+    startGiftPetals();
+  })();
+
+  function startGiftPetals() {
+    const c = document.getElementById('gift-petals');
+    const cx = c.getContext('2d');
+    let gp = [];
+    function resize() { c.width = c.offsetWidth; c.height = c.offsetHeight; }
+    function mkp() {
+      return { x: Math.random()*c.width, y:-20, size: Math.random()*14+6,
+        sy: Math.random()*1.2+0.4, sx: Math.sin(Math.random()*Math.PI*2)*0.6,
+        rot: Math.random()*360, rs: Math.random()*2-1,
+        op: Math.random()*0.35+0.1,
+        col: ['#E8D5C4','#D4A0A0','#C9A98A','#F0DDD8'][Math.floor(Math.random()*4)] };
+    }
+    function draw(p) {
+      cx.save(); cx.translate(p.x,p.y); cx.rotate(p.rot*Math.PI/180);
+      cx.globalAlpha=p.op; cx.fillStyle=p.col;
+      cx.beginPath(); cx.ellipse(0,0,p.size/2,p.size,0,0,Math.PI*2); cx.fill(); cx.restore();
+    }
+    function loop() {
+      cx.clearRect(0,0,c.width,c.height);
+      if(gp.length<30) gp.push(mkp());
+      gp = gp.filter(p=>p.y<c.height+30);
+      gp.forEach(p=>{ p.y+=p.sy; p.x+=p.sx; p.rot+=p.rs; draw(p); });
+      requestAnimationFrame(loop);
+    }
+    window.addEventListener('resize',resize); resize(); loop();
+  }
+
+  function copyGiftLink() {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = document.getElementById('copy-btn');
+      btn.textContent = '✓ Link copiado!';
+      setTimeout(() => btn.textContent = '⧉ Copiar link do cartão', 2000);
+    });
+  }
 </script>
-</body>
-</html>
+
+<!-- ═══════════════════════════════════════
+     TELA DO CARTÃO FINAL (via URL params)
+════════════════════════════════════════ -->
+<div id="gift-screen" style="display:none; min-height:100vh; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(160deg,#2C1F14 0%,#3D2B1A 100%); padding:2rem; position:relative; overflow:hidden;">
+
+  <canvas id="gift-petals" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
+
+  <!-- Cartão -->
+  <div style="width:100%;max-width:400px;position:relative;z-index:2;animation:fadeSlideUp 1s ease 0.3s both;">
+
+    <div style="background:var(--cream);box-shadow:0 60px 120px rgba(0,0,0,0.5);position:relative;">
+      <!-- borda dourada -->
+      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,transparent,var(--gold),var(--taupe),var(--gold),transparent);"></div>
+
+      <!-- Topo escuro -->
+      <div style="background:var(--dark);padding:1.8rem 2rem 2.2rem;text-align:center;position:relative;overflow:hidden;">
+        <div style="position:absolute;inset:0;pointer-events:none;">
+          <span style="position:absolute;top:10%;left:8%;font-size:1.1rem;opacity:0.12;">🌸</span>
+          <span style="position:absolute;top:60%;left:5%;font-size:1rem;opacity:0.1;">✿</span>
+          <span style="position:absolute;top:20%;right:10%;font-size:1.1rem;opacity:0.12;">🌸</span>
+          <span style="position:absolute;top:65%;right:8%;font-size:1rem;opacity:0.1;">✿</span>
+        </div>
+        <div style="position:absolute;bottom:-1px;left:0;right:0;height:22px;background:var(--cream);clip-path:ellipse(55% 100% at 50% 100%);"></div>
+        <p style="font-size:0.55rem;letter-spacing:0.5em;text-transform:uppercase;color:var(--taupe);margin-bottom:0.4rem;">Vale-Presente Digital</p>
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.5rem;font-weight:300;color:var(--cream);letter-spacing:0.08em;">Dra. Débora Araújo</div>
+      </div>
+
+      <!-- Corpo -->
+      <div style="padding:2.2rem 2rem 1.5rem;text-align:center;">
+
+        <div style="font-size:1.6rem;margin-bottom:1rem;animation:gentlePulse 3s ease-in-out infinite;">🌸</div>
+
+        <!-- De / Para -->
+        <div style="margin-bottom:1.5rem;">
+          <p style="font-size:0.55rem;letter-spacing:0.45em;text-transform:uppercase;color:var(--taupe);margin-bottom:0.15rem;">com amor, de</p>
+          <p id="gs-from" style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;color:var(--dark);">—</p>
+          <p style="font-size:0.9rem;color:var(--rose);margin:0.3rem 0;animation:heartbeat 1.5s ease-in-out infinite;">♥</p>
+          <p style="font-size:0.55rem;letter-spacing:0.45em;text-transform:uppercase;color:var(--taupe);margin-bottom:0.15rem;">para</p>
+          <p id="gs-to" style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:400;color:var(--gold);line-height:1.1;">—</p>
+        </div>
+
+        <!-- Divisor -->
+        <div style="display:flex;align-items:center;gap:0.8rem;margin:1.2rem 0;">
+          <div style="flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--nude));"></div>
+          <span style="font-size:0.7rem;color:var(--taupe);opacity:0.6;">✦</span>
+          <div style="flex:1;height:1px;background:linear-gradient(90deg,var(--nude),transparent);"></div>
+        </div>
+
+        <!-- Presente -->
+        <div style="background:var(--dark);padding:1.4rem 1.5rem 1.1rem;margin:0 -0.5rem 1.5rem;position:relative;">
+          <div style="position:absolute;inset:4px;border:1px solid rgba(184,148,106,0.2);pointer-events:none;"></div>
+          <p style="font-size:0.55rem;letter-spacing:0.45em;text-transform:uppercase;color:var(--taupe);margin-bottom:0.4rem;">este presente é</p>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--cream);line-height:1.1;margin-bottom:0.3rem;">Um Vale Botox</div>
+          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.82rem;color:var(--taupe);">com a Dra. Débora Araújo · Curitiba</p>
+        </div>
+
+        <!-- Frase -->
+        <p id="gs-quote" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--dark);line-height:1.75;padding:0 0.5rem;opacity:0.85;">"Flores murcham, mas a sua beleza merece durar para sempre."</p>
+
+        <!-- Rodapé -->
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0 0.5rem;border-top:1px solid var(--nude);margin-top:1.5rem;">
+          <div style="font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--taupe);line-height:1.8;">
+            <div>Válido por 90 dias</div>
+            <div>@dradeborahg</div>
+          </div>
+          <div style="width:44px;height:44px;border:1px solid var(--nude);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🌸</div>
+          <div style="font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--taupe);line-height:1.8;text-align:right;">
+            <div>Curitiba · PR</div>
+            <div>Dia dos Namorados</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botão agendar -->
+      <div style="padding:1rem 2rem 1.5rem;border-top:1px solid var(--nude);">
+        <a id="gs-wpp" href="https://wa.me/554197623698?text=Olá%20Dra.%20Débora!%20Recebi%20meu%20vale-presente%20e%20quero%20agendar%20meu%20Botox%20🌸" target="_blank"
+          style="display:flex;align-items:center;justify-content:center;gap:0.6rem;padding:1rem;background:#25D366;color:white;text-decoration:none;font-family:'Jost',sans-serif;font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;transition:opacity 0.2s;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Agendar meu procedimento
+        </a>
+      </div>
+    </div>
+
+    <!-- Copiar link (só aparece se vier de uma URL gerada) -->
+    <button id="copy-btn" onclick="copyGiftLink()"
+      style="width:100%;margin-top:0.8rem;padding:0.8rem;background:transparent;border:1px solid rgba(184,148,106,0.3);color:var(--taupe);font-family:'Jost',sans-serif;font-size:0.6rem;letter-spacing:0.25em;text-transform:uppercase;cursor:pointer;transition:border-color 0.2s,color 0.2s;">
+      ⧉ Copiar link do cartão
+    </button>
+
+    <p style="text-align:center;margin-top:1.2rem;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(184,148,106,0.4);">
+      © Dra. Débora Araújo · Curitiba
+    </p>
+  </div>
+</div>
